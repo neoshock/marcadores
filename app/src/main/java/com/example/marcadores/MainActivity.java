@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     .snippet(e.toString()));
         });
 
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(defaultLat));
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLat, 16.0f));
     }
 
     private List<Facultad> getFacultades(){
