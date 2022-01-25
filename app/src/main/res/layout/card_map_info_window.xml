@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="15dp"
     app:cardElevation="6dp"
-    android:layout_margin="18dp">
+    android:layout_margin="9dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Facultad"
-                android:textSize="24dp"
+                android:textSize="21dp"
                 android:textStyle="bold"></TextView>
 
             <TextView
@@ -36,30 +36,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Decano"
-                android:textSize="21dp"
+                android:textSize="18dp"
                 android:textStyle="bold"></TextView>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="9dp">
+        android:padding="15dp">
         <TextView
             android:id="@+id/dir_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dirección"
-            android:textSize="18dp"></TextView>
+            android:layout_margin="3dp"
+            android:textSize="15dp"></TextView>
 
         <TextView
             android:id="@+id/telf_num"
+            android:layout_margin="3dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Numero telefonico"
-            android:textSize="18dp"></TextView>
+            android:textSize="15dp"></TextView>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
