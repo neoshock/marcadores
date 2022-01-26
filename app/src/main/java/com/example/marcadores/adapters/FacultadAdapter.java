@@ -36,7 +36,6 @@ public class FacultadAdapter implements GoogleMap.InfoWindowAdapter {
             decanoName.setText("Decano: " + results[1]);
             direccionName.setText(results[2]);
             telefonoNum.setText(results[3]);
-            System.out.println(results[4]);
             Picasso.get().load(results[4])
                     .placeholder(R.drawable.logo_uteq)
                     .into(logoImage);

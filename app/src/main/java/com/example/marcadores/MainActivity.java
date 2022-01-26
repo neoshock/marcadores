@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.marcadores.adapters.FacultadAdapter;
 import com.example.marcadores.models.Facultad;
@@ -20,6 +21,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -37,61 +44,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
-        List<Facultad> facultadList = getFacultades();
-
         this.googleMap = googleMap;
         this.googleMap.setInfoWindowAdapter(new FacultadAdapter(this));
         LatLng defaultLat = new LatLng(-1.01289,-79.469265);
-        facultadList.forEach((e)-> {
-            LatLng direccion = new LatLng(e.getLat(), e.getAlt());
-            this.googleMap.addMarker(new MarkerOptions().position(direccion)
-                    .title("Algo Aqui")
-                    .snippet(e.toString()));
+
+        Retrofit retrofit = new Retrofit.Builder().
+                baseUrl("https://my-json-server.typicode.com/neoshock/fakeonlinerestserver/").
+                addConverterFactory(GsonConverterFactory.create()).build();
+
+        FacultadService facultadService = retrofit.create(FacultadService.class);
+        Call<List<Facultad>> callData = facultadService.getFacultades();
+
+        callData.enqueue(new Callback<List<Facultad>>() {
+
+            @Override
+            public void onResponse(Call<List<Facultad>> call, Response<List<Facultad>> response) {
+                List<Facultad> facultadList = response.body();
+                facultadList.forEach((e)-> {
+                    LatLng direccion = new LatLng(e.getLat(), e.getAlt());
+                    googleMap.addMarker(new MarkerOptions().position(direccion)
+                            .title("Algo Aqui")
+                            .snippet(e.toString()));
+                });
+            }
+            @Override
+            public void onFailure(Call<List<Facultad>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, t.getMessage().toString(), Toast.LENGTH_LONG).show();
+            }
         });
 
         this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(defaultLat, 16.0f));
-    }
-
-    private List<Facultad> getFacultades(){
-        List<Facultad> facultades = new ArrayList<>();
-        //Campus la maria
-        facultades.add(new Facultad("Facultad de Ciencias de la Ingeniería",
-                "Ing. Washington Chiriboga Casanova",
-                "Campus “La María” - km 7 vía Quevedo-El Empalme",
-                "(+593) 5 3702-220 Ext. 8052",
-                "https://www.uteq.edu.ec/images/about/logo_fci.jpg", -1.080257,-79.501652));
-
-        facultades.add(new Facultad("Facultad de Ciencias Agropecuarias",
-                "Ing. Rolando López Tobar",
-                "Campus “La María” - km 7 vía Quevedo-El Empalme",
-                "(+593) 5 3702-220 Ext. 8067",
-                "https://www.uteq.edu.ec/images/about/logo_fcagrop.jpg", -1.080316,-79.502389));
-
-        facultades.add(new Facultad("Facultad de Ciencias de la Industria y Producción",
-                "Ing. Henry Nelson Aguilera Vidal",
-                "Campus “La María” - km 7 vía Quevedo-El Empalme",
-                "(+593) 5 3702-220 Ext. 8025",
-                "https://www.uteq.edu.ec/images/about/logo_fcip.jpg", -1.080802,-79.501709));
-
-        //Campus central
-        facultades.add(new Facultad("Facultad de Ciencias Empresariales",
-                "Ing. Magali Gioconda Calero Lara",
-                "Campus Ingeniero Manuel Agustín Haz Álvarez - Av. Quito km. 1 1/2 vía a Santo Domingo de los Tsáchilas",
-                "(+593) 5 3702-220 Ext. 8038",
-                "https://www.uteq.edu.ec/images/about/logo_fce.jpg", -1.012214,-79.469327));
-
-        facultades.add(new Facultad("Facultad de Ciencias de la Salud",
-                "Ing. Magali Gioconda Calero Lara",
-                "Campus Ingeniero Manuel Agustín Haz Álvarez - Av. Quito km. 1 1/2 vía a Santo Domingo de los Tsáchilas",
-                " (+593) 5 3702-220 Ext. 8001",
-                "https://www.uteq.edu.ec/images/about/logo_enf1.jpg", -1.012407,-79.469925));
-
-        facultades.add(new Facultad("Facultad de Ciencias de la Educación",
-                "Psi. Pablo Alberto Parra Silva",
-                "Campus Ingeniero Manuel Agustín Haz Álvarez - Av. Quito km. 1 1/2 vía a Santo Domingo de los Tsáchilas",
-                "(+593) 5 3702-220 Ext. 8066",
-                "https://www.uteq.edu.ec/images/escudouteq.png", -1.012761,-79.470806));
-
-        return facultades;
     }
 }
